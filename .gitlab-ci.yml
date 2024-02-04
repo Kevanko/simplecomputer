@@ -6,6 +6,7 @@ check-format:
   stage: check-format
   script:
     - find . -type f -name *.[ch] | xargs clang-format --style GNU -i --verbose
+    - git add -u
     - git diff --exit-code
 build:
   stage: build
