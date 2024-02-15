@@ -1,0 +1,9 @@
+*~
+*main
+*output
+*bin/
+*.d
+*.o
+*.a
+*.vscode/
+*.clang-format
