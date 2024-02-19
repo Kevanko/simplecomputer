@@ -1,5 +1,6 @@
-APP_NAME = test
-CFLAGS = -Wall -Wextra -Werror
+APP_NAME = pr01
+LIB_NAME = libsimplecomputer
+CFLAGS = -Wall
 CC = gcc
 SRC_EXT = c
 
@@ -8,13 +9,14 @@ OBJ_DIR = obj
 BIN_DIR = bin
 
 APP_PATH = $(BIN_DIR)/$(APP_NAME)
+LIB_PATH = ../mySimpleComputer/bin/$(LIB_NAME).a
 APP_SOURCES = $(wildcard $(SRC_DIR)/*.$(SRC_EXT))
 APP_OBJECTS = $(APP_SOURCES:$(SRC_DIR)/%.$(SRC_EXT)=$(OBJ_DIR)/%.o)
 DEPS = $(APP_OBJECTS:.o=.d)
 
 .PHONY: all clean
 
-all: $(BIN_DIR) $(OBJ_DIR) $(APP_PATH)
+all: $(BIN_DIR) $(OBJ_DIR) $(LIB_PATH) $(APP_PATH)
 
 -include $(DEPS)
 
@@ -24,7 +26,7 @@ $(BIN_DIR):
 $(OBJ_DIR):
 	mkdir -p $@
 
-$(APP_PATH): $(APP_OBJECTS)
+$(APP_PATH): $(APP_OBJECTS) $(LIB_PATH)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.$(SRC_EXT)
