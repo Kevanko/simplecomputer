@@ -5,11 +5,11 @@
 void
 printCell (int address)
 {
-  int value;
-  // Получаем значение ячейки памяти по указанному адресу
-  sc_memoryGet (address, &value);
-  // Выводим значение ячейки в декодированном виде
-  printf ("%04X: %04X\n", address, value);
+    int value;
+    // Получаем значение ячейки памяти по указанному адресу
+    sc_memoryGet (address, &value);
+    // Выводим значение ячейки в декодированном виде
+    printf ("%04X: %04X\n", address, value);
 }
 
 // Выводит значения флагов в заданном формате
@@ -31,35 +31,35 @@ printFlags ()
 void
 printDecodedCommand (int value)
 {
-  printf ("Decimal: %d\n", value);
-  printf ("Octal: %o\n", value);
-  printf ("Hexadecimal: %X\n", value);
-  printf ("Binary: ");
-  for (int i = 15; i >= 0; i--)
-  {
-    printf ("%d", (value >> i) & 1);
-  }
-  printf ("\n");
+    printf ("Decimal: %d\n", value);
+    printf ("Octal: %o\n", value);
+    printf ("Hexadecimal: %X\n", value);
+    printf ("Binary: ");
+    for (int i = 15; i >= 0; i--)
+    {
+        printf ("%d", (value >> i) & 1);
+    }
+    printf ("\n");
 }
 
 // Выводит значение аккумулятора
 void
 printAccumulator ()
 {
-  int accumulator;
-  // Получаем значение аккумулятора
-  sc_accumulatorGet (&accumulator);
-  // Выводим значение аккумулятора
-  printf ("Accumulator: %04X\n", accumulator);
+    int accumulator;
+    // Получаем значение аккумулятора
+    sc_accumulatorGet (&accumulator);
+    // Выводим значение аккумулятора
+    printf ("Accumulator: %04X\n", accumulator);
 }
 
 // Выводит значение счетчика команд
 void
 printCounters ()
 {
-  int icounter;
-  // Получаем значение счетчика команд
-  sc_icounterGet (&icounter);
-  // Выводим значение счетчика команд
-  printf ("Instruction Counter: %04X\n", icounter);
+    int icounter;
+    // Получаем значение счетчика команд
+    sc_icounterGet (&icounter);
+    // Выводим значение счетчика команд
+    printf ("Instruction Counter: %04X\n", icounter);
 }
