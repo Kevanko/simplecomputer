@@ -16,15 +16,15 @@ printCell (int address)
 void
 printFlags ()
 {
-  int flags;
-  // Получаем значения всех флагов
-  if (sc_regGet (0, &flags) == 0)
-  {
-    // Выводим значения флагов в заданном формате
-    printf ("Flags: %c%c%c\n", (flags & FLAG_OVERFLOW_MASK) ? 'O' : '_',
-            (flags & FLAG_ZERO_MASK) ? 'Z' : '_',
-            (flags & FLAG_OUT_OF_MEMORY_MASK) ? 'M' : '_');
-  }
+    int flags;
+    // Получаем значения всех флагов
+    if (sc_regGet (0, &flags) == 0)
+    {
+        // Выводим значения флагов в заданном формате
+        printf ("Flags: %c%c%c\n", (flags & FLAG_OVERFLOW_MASK) ? 'O' : '_',
+                (flags & FLAG_ZERO_MASK) ? 'Z' : '_',
+                (flags & FLAG_OUT_OF_MEMORY_MASK) ? 'M' : '_');
+    }
 }
 
 // Выводит переданное значение в различных системах счисления
