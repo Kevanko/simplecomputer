@@ -1,5 +1,6 @@
 #pragma once
 #include <stdio.h>
+#include <stdlib.h>
 
 // Определение размера команды в битах
 #define COMMAND_SIZE 16
