@@ -1,85 +1,8 @@
-#include "../include/mySimpleComputer.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <mySimpleComputer.h>
 
-// Глобальные переменные для регистров
-static int accumulator;
-static int instruction_counter;
-static int flags_register;
-// Глобальная переменная для памяти
-static int memory[MEMORY_SIZE];
-
-int
-sc_memoryInit (void)
-{
-  for (int i = 0; i < MEMORY_SIZE; i++)
-    {
-      memory[i] = 0;
-    }
-  return 0;
-}
-
-int
-sc_memorySet (int address, int value)
-{
-  if (address < 0 || address >= MEMORY_SIZE || value < 0 || value > 0x7FFF)
-    {
-      return -1; // выход за границы или недопустимое значение
-    }
-  memory[address] = value;
-  return 0;
-}
-
-int
-sc_memoryGet (int address, int *value)
-{
-  if (address < 0 || address >= MEMORY_SIZE || !value)
-    {
-      return -1; // выход за границы или неверный указатель
-    }
-  *value = memory[address];
-  return 0;
-}
-
-int
-sc_memorySave (char *filename)
-{
-  if (!filename)
-    {
-      return -1; // неверный указатель на имя файла
-    }
-  FILE *file = fopen (filename, "wb");
-  if (!file)
-    {
-      return -1; // ошибка открытия файла
-    }
-  fwrite (memory, sizeof (int), MEMORY_SIZE, file);
-  fclose (file);
-  return 0;
-}
-
-int
-sc_memoryLoad (char *filename)
-{
-  if (!filename)
-    {
-      return -1; // неверный указатель на имя файла
-    }
-  FILE *file = fopen (filename, "rb");
-  if (!file)
-    {
-      return -1; // ошибка открытия файла
-    }
-  int buffer[MEMORY_SIZE];
-  fread (buffer, sizeof (int), MEMORY_SIZE, file);
-  fclose (file);
-  // Если чтение успешно, переносим содержимое в оперативную память
-  for (int i = 0; i < MEMORY_SIZE; i++)
-    {
-      memory[i] = buffer[i];
-    }
-  return 0;
-}
+extern int accumulator;
+extern int instruction_counter;
+extern int flags_register;
 
 // Функции инициализации
 int

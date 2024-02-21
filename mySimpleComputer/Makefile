@@ -1,5 +1,5 @@
 APP_NAME = libsimplecomputer.a
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -I ../include -Wall -Wextra -Werror
 CC = gcc
 SRC_EXT = c
 
