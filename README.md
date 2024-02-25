@@ -1,7 +1,5 @@
 # SimpleComputer
 
-ИВ-222
-Николаенков М.Д.
 
 ## Getting started
 
