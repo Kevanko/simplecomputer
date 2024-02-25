@@ -6,10 +6,8 @@ void
 printCell (int address)
 {
   int value;
-  // Получаем значение ячейки памяти по указанному адресу
   sc_memoryGet (address, &value);
-  // Выводим значение ячейки в декодированном виде
-  printf ("%04X: %04X\n", address, value);
+  printDecodedCommand (value); // Вывод в декодированном виде
 }
 
 // Выводит значения флагов в заданном формате
