@@ -1,8 +1,8 @@
 #pragma once
 
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
 
 #define COMMAND_SIZE 16
 #define COMMAND_SIGN_BIT 0x8000      //  10000000 00000000
