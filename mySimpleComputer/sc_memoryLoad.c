@@ -1,7 +1,5 @@
 #include <mySimpleComputer.h>
 
-extern int memory;
-
 int
 sc_memoryLoad (char *filename)
 {
@@ -15,7 +13,8 @@ sc_memoryLoad (char *filename)
       return -1; // ошибка открытия файла
     }
   int buffer[MEMORY_SIZE];
-  fread (buffer, sizeof (int), MEMORY_SIZE, file);
+  if (fread (buffer, sizeof (int), MEMORY_SIZE, file) == 0)
+    return -1;
   fclose (file);
   // Если чтение успешно, переносим содержимое в оперативную память
   for (int i = 0; i < MEMORY_SIZE; i++)

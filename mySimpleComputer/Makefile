@@ -1,5 +1,5 @@
 APP_NAME = libsimplecomputer.a
-CFLAGS = -I ../include -Wall -Wextra -Werror
+CFLAGS = -I../include -Wall -Wextra -Werror
 CC = gcc
 SRC_EXT = c
 
@@ -9,7 +9,7 @@ BIN_DIR = bin
 
 APP_PATH = $(BIN_DIR)/$(APP_NAME)
 APP_SOURCES = $(wildcard $(SRC_DIR)/*.$(SRC_EXT))
-APP_OBJECTS = $(APP_SOURCES:$(SRC_DIR)/%.$(SRC_EXT)=$(OBJ_DIR)/%.o)
+APP_OBJECTS = $(APP_SOURCES:%.$(SRC_EXT)=$(OBJ_DIR)/%.o)
 DEPS = $(APP_OBJECTS:.o=.d)
 
 .PHONY: all clean

@@ -1,7 +1,5 @@
 #include <mySimpleComputer.h>
 
-extern int memory;
-
 int
 sc_memorySet (int address, int value)
 {

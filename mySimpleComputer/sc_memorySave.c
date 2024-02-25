@@ -1,7 +1,5 @@
 #include <mySimpleComputer.h>
 
-extern int memory;
-
 int
 sc_memorySave (char *filename)
 {
@@ -14,7 +12,8 @@ sc_memorySave (char *filename)
     {
       return -1; // ошибка открытия файла
     }
-  fwrite (memory, sizeof (int), MEMORY_SIZE, file);
+  if (fwrite (memory, sizeof (int), MEMORY_SIZE, file) == 0)
+    return -1;
   fclose (file);
   return 0;
 }
