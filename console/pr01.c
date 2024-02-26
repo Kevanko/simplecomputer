@@ -22,9 +22,10 @@ main ()
   // Вывод содержимого оперативной памяти
   for (int i = 0; i < MEMORY_SIZE; i++)
     {
-      if((i) % 10 == 0){
-        printf("\n");
-      }
+      if ((i) % 10 == 0)
+        {
+          printf ("\n");
+        }
       printCell (i);
     }
   printf ("\n");
@@ -65,7 +66,7 @@ main ()
   // Декодирование произвольной ячейки памяти и значения
   // аккумулятора
   printCell (8);
-  printf("\n");
+  printf ("\n");
   printAccumulator ();
 
   // Кодирование команды и вывод полученного значения в разных системах
@@ -73,7 +74,7 @@ main ()
   int command = 0x33;
   int encodedValue;
   sc_commandEncode (0, command, 0x59, &encodedValue);
-  printDecodedCommand(encodedValue);
+  printDecodedCommand (encodedValue);
   printf ("\n");
 
   return 0;

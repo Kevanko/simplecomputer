@@ -7,7 +7,7 @@ printCell (int address)
 {
   int value;
   sc_memoryGet (address, &value);
-  printf("%d", value);
+  printf ("%d", value);
 }
 
 // Выводит значения флагов в заданном формате
