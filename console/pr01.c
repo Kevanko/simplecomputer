@@ -22,20 +22,15 @@ main ()
   // Вывод содержимого оперативной памяти
   for (int i = 0; i < MEMORY_SIZE; i++)
     {
-      printCell (i); // Вывод в декодированном виде
-      if ((i + 1) % 10 == 0)
-        {
-          printf ("\n");
-        }
-      else
-        {
-          printf (" ");
-        }
+      if((i) % 10 == 0){
+        printf("\n");
+      }
+      printCell (i);
     }
   printf ("\n");
 
   // Попытка задать недопустимое значение ячейке памяти
-  int invalidMemoryValue = 200;
+  int invalidMemoryValue = 40000;
   int result = sc_memorySet (10, invalidMemoryValue);
   printf ("Status of setting invalid memory value: %d\n", result);
 
@@ -51,44 +46,34 @@ main ()
 
   // Установка значения аккумулятора и вывод его на экран
   sc_accumulatorSet (100);
-  int accumulatorValue;
-  sc_accumulatorGet (&accumulatorValue);
-  printf ("Accumulator value: %d\n", accumulatorValue);
+  printAccumulator ();
 
   // Попытка задать недопустимое значение аккумулятору
-  int invalidAccValue = 300;
+  int invalidAccValue = 40000;
   result = sc_accumulatorSet (invalidAccValue);
   printf ("Status of setting invalid accumulator value: %d\n", result);
 
   // Установка значения счетчика команд и вывод его на экран
   sc_icounterSet (50);
-  int counterValue;
-  sc_icounterGet (&counterValue);
-  printf ("Counter value: %d\n", counterValue);
+  printCounters ();
 
   // Попытка задать недопустимое значение счетчику команд
   int invalidCounterValue = -10;
   result = sc_icounterSet (invalidCounterValue);
   printf ("Status of setting invalid counter value: %d\n", result);
 
-  // Декодирование значения произвольной ячейки памяти и значения
+  // Декодирование произвольной ячейки памяти и значения
   // аккумулятора
-  int memValue;
-  sc_memoryGet (0, &memValue);
-  printf ("Decoded memory value: %d\n", memValue);
-  printf ("Decoded accumulator value: %d\n", accumulatorValue);
+  printCell (8);
+  printf("\n");
+  printAccumulator ();
 
   // Кодирование команды и вывод полученного значения в разных системах
   // счисления
-  int command = 10; // Пример команды
+  int command = 0x33;
   int encodedValue;
-  sc_commandEncode (0, command, 0, &encodedValue);
-  printf ("Encoded command value in decimal: %d\n", encodedValue);
-  printf ("Encoded command value in binary: ");
-  for (int i = 0; i < 32; i++)
-    {
-      printf ("%d", (encodedValue >> (31 - i)) & 1);
-    }
+  sc_commandEncode (0, command, 0x59, &encodedValue);
+  printDecodedCommand(encodedValue);
   printf ("\n");
 
   return 0;

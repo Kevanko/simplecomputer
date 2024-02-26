@@ -7,7 +7,7 @@ printCell (int address)
 {
   int value;
   sc_memoryGet (address, &value);
-  printDecodedCommand (value); // Вывод в декодированном виде
+  printf("%d", value);
 }
 
 // Выводит значения флагов в заданном формате
@@ -15,10 +15,8 @@ void
 printFlags ()
 {
   int flags;
-  // Получаем значения всех флагов
   if (sc_regGet (0, &flags) == 0)
     {
-      // Выводим значения флагов в заданном формате
       printf ("Flags: %c%c%c\n", (flags & FLAG_OVERFLOW_MASK) ? 'O' : '_',
               (flags & FLAG_ZERO_MASK) ? 'Z' : '_',
               (flags & FLAG_OUT_OF_MEMORY_MASK) ? 'M' : '_');
@@ -33,7 +31,7 @@ printDecodedCommand (int value)
   printf ("Octal: %o\n", value);
   printf ("Hexadecimal: %X\n", value);
   printf ("Binary: ");
-  for (int i = 15; i >= 0; i--)
+  for (int i = 14; i >= 0; i--)
     {
       printf ("%d", (value >> i) & 1);
     }
@@ -45,10 +43,8 @@ void
 printAccumulator ()
 {
   int accumulator;
-  // Получаем значение аккумулятора
   sc_accumulatorGet (&accumulator);
-  // Выводим значение аккумулятора
-  printf ("Accumulator: %04X\n", accumulator);
+  printf ("Accumulator: %d\n", accumulator);
 }
 
 // Выводит значение счетчика команд
@@ -56,8 +52,6 @@ void
 printCounters ()
 {
   int icounter;
-  // Получаем значение счетчика команд
   sc_icounterGet (&icounter);
-  // Выводим значение счетчика команд
-  printf ("Instruction Counter: %04X\n", icounter);
+  printf ("Instruction Counter: %d\n", icounter);
 }
