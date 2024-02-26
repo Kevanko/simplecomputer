@@ -3,7 +3,7 @@
 int
 sc_commandValidate (int command)
 {
-  if (command < 0 || command > 127)
+  if (command < 0 || command > 76)
     return -1;
   return 0;
 }
