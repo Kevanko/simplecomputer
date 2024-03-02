@@ -1,6 +1,6 @@
 APP_NAME = pr01
 LIB_NAME = libsimplecomputer
-CFLAGS = -Wall
+CFLAGS = -I../include -Wall -Wextra -Werror
 CC = gcc
 SRC_EXT = c
 

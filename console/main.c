@@ -1,4 +1,4 @@
-#include "../include/mySimpleComputer.h"
+#include <mySimpleComputer.h>
 #include <stdio.h>
 
 // Выводит на экран содержимое ячейки оперативной памяти по указанному адресу
