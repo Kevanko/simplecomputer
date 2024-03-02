@@ -37,12 +37,14 @@ main ()
 
   // Установка произвольных значений флагов и вывод их содержимого
   sc_regSet (FLAG_OVERFLOW_MASK, 1);
-  sc_regSet (FLAG_ZERO_MASK, 0);
+  sc_regSet (FLAG_DIVISION_BY_ZERO_MASK, 0);
   sc_regSet (FLAG_OUT_OF_MEMORY_MASK, 1);
+  sc_regSet (FLAG_INVALID_COMMAND_MASK, 0);
+  sc_regSet (FLAG_IGNORE_CLOCK_MASK, 1);
   printFlags ();
 
   // Попытка установить некорректное значение флага
-  result = sc_regSet (FLAG_ZERO_MASK, 2);
+  result = sc_regSet (FLAG_OVERFLOW_MASK, 2);
   printf ("Status of setting invalid flag value: %d\n", result);
 
   // Установка значения аккумулятора и вывод его на экран

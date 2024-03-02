@@ -12,11 +12,11 @@
 
 #define MEMORY_SIZE 128
 
-#define FLAG_OVERFLOW_MASK 1
-#define FLAG_DIVISION_BY_ZERO_MASK 2
-#define FLAG_OUT_OF_MEMORY_MASK 3
-#define FLAG_INVALID_COMMAND_MASK 4
-#define FLAG_IGNORE_CLOCK_MASK 5
+#define FLAG_OVERFLOW_MASK 0x1         // O
+#define FLAG_DIVISION_BY_ZERO_MASK 0x2 // Z
+#define FLAG_OUT_OF_MEMORY_MASK 0x4    // M
+#define FLAG_INVALID_COMMAND_MASK 0x8  // C
+#define FLAG_IGNORE_CLOCK_MASK 0x10    // I
 
 extern int *memory;
 extern int accumulator;
