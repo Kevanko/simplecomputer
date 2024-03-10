@@ -1,35 +1,68 @@
-#include "../include/mySimpleComputer.h"
+#include "mySimpleComputer.h"
 #include "console.h"
-#include <stdio.h>
+#include "myTerm.h"
 
-int
-main ()
-{
-  sc_memoryInit ();
-  sc_accumulatorInit ();
-  sc_icounterInit ();
-  sc_regInit ();
+int TEST = 15;
 
-  mt_clrscr ();
+void printMemory() {
+    enum colors fg = GREEN, bg = BLACK;
+    for (int i = 0; i < MEMORY_SIZE; i++) {
+        if (i == TEST) {
+            fg = BLACK;
+            bg = WHITE;
+        } else {
+            fg = GREEN;
+            bg = BLACK;
+        }
+        printCell(i, fg, bg);
+    }
+}
 
-  for (int i = 10; i < 20; i++)
-    {
-      sc_memorySet (i, 2128);
+void printTerm(int address, int input) {
+    static int line = 0;
+    mt_gotoXY(INOUT_BLOCK_X, INOUT_BLOCK_Y + line);
+    if (input) {
+        printf("%04X > +%04X", address, memory[address]);
+    } else {
+        printf("%04X < ", address);
+    }
+    line = (line + 1) % INOUT_BLOCK_HEIGHT;
+}
+
+// Приложение console
+int main() {
+    if (!isatty(STDOUT_FILENO)) {
+        printf("Error: Output is not a terminal\n");
+        return 1;
     }
 
-  // Вывод содержимого оперативной памяти
-  for (int i = 0; i < MEMORY_SIZE; i++)
-    printCell (i, WHITE, BLACK);
+    int rows, cols;
+    mt_getscreensize(&rows, &cols);
+    if (rows <  12 || cols < 20) {
+        printf("Error: Terminal window is too small\n");
+        return 1;
+    }
 
-  sc_regSet (FLAG_OVERFLOW_MASK, 1);
-  sc_regSet (FLAG_DIVISION_BY_ZERO_MASK, 0);
-  sc_regSet (FLAG_OUT_OF_MEMORY_MASK, 1);
-  sc_regSet (FLAG_INVALID_COMMAND_MASK, 0);
-  sc_regSet (FLAG_IGNORE_CLOCK_MASK, 1);
-  printFlags ();
-  printDecodedCommand (15);
-  printAccumulator ();
-  printCounters ();
-  mt_gotoXY (18, 0);
-  return 0;
+    mt_clrscr();
+    
+    // Инициализация памяти, регистров и аккумулятора
+    sc_memoryInit();
+    sc_regInit();
+    sc_accumulatorInit();
+    sc_icounterInit();
+
+    // Вывод текстовых данных консоли
+    printMemory();
+    printFlags();
+    printDecodedCommand(15);
+    printAccumulator();
+    printCounters();
+
+    // Вывод 7 произвольных ячеек в блок IN-OUT
+    for (int i = 0; i < 7; i++) {
+        printTerm(rand() % MEMORY_SIZE, 0);
+    }
+
+    mt_gotoXY(0, 25);
+    return 0;
 }

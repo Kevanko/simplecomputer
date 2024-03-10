@@ -1,4 +1,4 @@
-APP_NAME = pr01
+APP_NAME = console
 LIB_NAME = libsimplecomputer
 LIB2_NAME = libmyterm
 CFLAGS = -I../include -Wall -Wextra -Werror

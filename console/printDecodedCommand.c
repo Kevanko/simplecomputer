@@ -3,7 +3,7 @@
 void
 printDecodedCommand (int value)
 {
-  mt_gotoXY (16, 0);
+  mt_gotoXY (COMMAND_X, COMMAND_Y);
   printf ("dec: %d", value);
   printf ("| oct: %o", value);
   printf ("| hex: %X", value);

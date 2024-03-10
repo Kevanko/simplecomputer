@@ -8,20 +8,11 @@
 void
 printCell (int address, enum colors fg, enum colors bg)
 {
-  // x и y - это координаты начала блока "Оперативная память"
-  int x = 1;
-  int y = 2;
-
-  int cell_x = x + (address % 10) * CELL_WIDTH + 1;
-  int cell_y = y + (address / 10) * CELL_HEIGHT;
-
+  int x = (address % 10) * 6 + 1 + MEMORY_X;
+  int y = (address / 10) + MEMORY_Y;
   mt_setfgcolor (fg);
   mt_setbgcolor (bg);
-
-  mt_gotoXY (cell_y, cell_x);
-
-  int value = memory[address];
-  printf ("+%04X", value);
-
+  mt_gotoXY (x, y);
+  printf ("+%04X", memory[address]);
   mt_setdefaultcolor ();
 }

@@ -4,11 +4,8 @@ void
 printFlags ()
 {
   int flags;
-  int row, col;
-  // Расчет расположения блока "Регистр флагов" в правом верхнем углу
-  row = 0;
-  col = 127 - 6;
-  mt_gotoXY (row, col);
+
+  mt_gotoXY (FLAGS_X, FLAGS_Y);
   if (sc_regGet (0, &flags) == 0)
     {
       printf ("%c %c %c %c %c\n", (flags & FLAG_OVERFLOW_MASK) ? 'O' : '_',
