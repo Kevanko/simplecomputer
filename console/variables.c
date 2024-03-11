@@ -1,0 +1,2 @@
+
+int ACTIVE_MEMORY = 15;
