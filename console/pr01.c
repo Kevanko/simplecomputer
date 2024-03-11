@@ -26,6 +26,11 @@ main ()
   sc_accumulatorInit ();
   sc_icounterInit ();
 
+  for (int i = 0; i < MEMORY_SIZE; i++)
+    {
+      sc_memorySet (i, rand () % 1000);
+    }
+
   sc_regSet (FLAG_OVERFLOW_MASK, 0);
   sc_regSet (FLAG_DIVISION_BY_ZERO_MASK, 0);
   sc_regSet (FLAG_OUT_OF_MEMORY_MASK, 1);
