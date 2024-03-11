@@ -1,18 +1,19 @@
 #include "console.h"
 
-void
-printCommand ()
+void printCommand(void)
 {
-  int cmd = memory[instruction_counter];
-  mt_gotoXY (COMMAND_X, COMMAND_Y);
-  if (!sc_commandValidate (cmd))
+    int cmd = memory[instruction_counter];
+    int sign, commandCode, operand;
+
+    mt_gotoXY(COMMAND_X, COMMAND_Y);
+
+    if (sc_commandValidate(cmd))
     {
-      printf ("! %02d : %02X", cmd >> 7, cmd);
+        printf("! %02X : %02X", cmd & COMMAND_SIGN_BIT, (cmd >> COMMAND_COMMAND_SHIFT) & 0x7F);
     }
-  else
+    else
     {
-      int sign, command, operand;
-      sc_commandDecode (cmd, &sign, &command, &operand);
-      printf ("  %02d : %02X", sign << 14 | command << 7 | operand, command);
+        sc_commandDecode(cmd, &sign, &commandCode, &operand);
+        printf("+%02d : %02X", sign, commandCode);
     }
 }
