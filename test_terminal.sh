@@ -17,10 +17,10 @@ delete_line="\033[K"
 
 # Escape-последовательности
 red_on_black="\033[31;40m"
-green_on_white="\033[32;47m"
+green_on_white="\033[32;44m"
 default_color="\033[0m"
 cursor_position="\033[5;10H"
-cursor_position_group="\033[6;8H"
+cursor_position_group="\033[16;16H"
 cursor_reset="\033[H\033[10;1H"
 
 # Очистка экрана

@@ -46,9 +46,10 @@ main ()
   printCommand ();
 
   // Вывод 7 произвольных ячеек в блок IN-OUT
-  for (int i = 0; i < 7; i++)
+  for (int i = 0; i < 8; i++)
     {
       printTerm (i, 1);
+      sleep (1);
     }
 
   mt_gotoXY (0, 25);

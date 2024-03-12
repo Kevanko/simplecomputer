@@ -29,6 +29,8 @@
 #define INOUT_BLOCK_HEIGHT 4
 
 extern int ACTIVE_MEMORY;
+extern int INOUT_ARRAY[];
+extern int INOUT_INPUT[];
 
 void printCell (int address, enum colors fg, enum colors bg);
 void printFlags ();
@@ -38,3 +40,4 @@ void printCounters ();
 void printCommand ();
 void printMemory ();
 void printTerm (int address, int input);
+void moveInout ();
