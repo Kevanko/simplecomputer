@@ -11,7 +11,8 @@ printCell (int address, enum colors fg, enum colors bg)
   int x = (address % 10) * 6 + 1 + MEMORY_X;
   int y = (address / 10) + MEMORY_Y;
   mt_setfgcolor (fg);
-  mt_setbgcolor (bg);
+  if (bg != 0)
+    mt_setbgcolor (bg);
   mt_gotoXY (x, y);
   printf ("+%04X", memory[address]);
   mt_setdefaultcolor ();

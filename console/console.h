@@ -1,4 +1,5 @@
 #pragma once
+#include <myBigChars.h>
 #include <mySimpleComputer.h>
 #include <myTerm.h>
 #include <stdio.h>
@@ -6,26 +7,26 @@
 #define MEMORY_X 2
 #define MEMORY_Y 2
 
-#define ACCUMULATOR_X 64
+#define ACCUMULATOR_X 66
 #define ACCUMULATOR_Y 2
 
-#define FLAGS_X 88
+#define FLAGS_X 92
 #define FLAGS_Y 2
 
-#define INSTR_COUNTER_X 64
-#define INSTR_COUNTER_Y 4
+#define INSTR_COUNTER_X 67
+#define INSTR_COUNTER_Y 5
 
-#define COMMAND_X 88
-#define COMMAND_Y 4
+#define COMMAND_X 96
+#define COMMAND_Y 5
 
 #define DECODE_X 3
-#define DECODE_Y 16
+#define DECODE_Y 17
 
 #define EDITED_CELL_X 2
 #define EDITED_CELL_Y 20
 
 #define INOUT_BLOCK_X 69
-#define INOUT_BLOCK_Y 18
+#define INOUT_BLOCK_Y 20
 #define INOUT_BLOCK_HEIGHT 4
 
 extern int ACTIVE_MEMORY;
@@ -41,3 +42,4 @@ void printCommand ();
 void printMemory ();
 void printTerm (int address, int input);
 void moveInout ();
+int generateFont ();

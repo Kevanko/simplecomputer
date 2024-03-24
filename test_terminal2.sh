@@ -1,37 +1,50 @@
 #!/bin/bash
 
 # Очистка экрана
-echo -e "\033[H\033[J"
+echo -ne "\E[H\E[2J"
 
-# Переключение на дополнительную кодировочную таблицу
-echo -e "\016" 
-
-# Вывод рамки из символов псевдографики
-row=10 # Начальная строка
-col=5  # Начальный столбец
-size=8 # Размер рамки (строки x столбцы)
-
-# Верхняя граница
-echo -e "\033[${row};${col}H╔$(printf -- '═%.0s' $(seq 1 $((size-2))))╗"
-
-# Стороны и внутри
-for ((i=1; i<size-1; i++)); do
-    echo -e "\033[$((row+i));${col}H║"
-    echo -e "\033[$((row+i));$((col+size-1))H║"
-    for ((j=1; j<size-1; j++)); do
-        echo -e "\033[$((row+i));$((col+j))H "
-    done
-done
-
-# Нижняя граница
-echo -e "\033[$((row+size-1));${col}H╚$(printf -- '═%.0s' $(seq 1 $((size-2))))╝"
-
-# Вывод большого символа внутри рамки (последняя цифра дня рождения)
-birthday_day=13 # Здесь нужно указать свой день рождения
-symbol=$((birthday_day%10))
-echo -e "\033[$((row+size/2));$((col+size/2-1))H${symbol}" # Символ псевдографики "закрашенный прямоугольник"
-
-# Возврат к основной кодировочной таблице
-echo -e "\017"
-
-echo -e "\033[H\033[20;1H"
+# Псевдографическая рамка
+echo -ne "\E[10;5H"  # Перемещаем курсор на 10 строку, 5 символ
+echo -ne "\E(0"       # Входим в режим альтернативного вывода символов
+echo -ne "lqqqqqqqqk" # Верхняя граница рамки
+echo -ne "\E[11;5H"   # Левая граница рамки
+echo -e "x"
+echo -ne "\E[11;14H"  # Правая граница рамки
+echo -e "x"
+echo -ne "\E[12;5H"
+echo -e "x"
+echo -ne "\E[12;14H"
+echo -e "x"
+echo -ne "\E[13;5H"
+echo -e "x"
+echo -ne "\E[13;14H"
+echo -e "x"
+echo -ne "\E[14;5H"
+echo -e "x"
+echo -ne "\E[14;14H"
+echo -e "x"
+echo -ne "\E[15;5H"
+echo -e "x"
+echo -ne "\E[15;14H"
+echo -e "x"
+echo -ne "\E[16;5H"
+echo -e "x"
+echo -ne "\E[16;14H"
+echo -e "x"
+echo -ne "\E[17;5H"
+echo -e "x"
+echo -ne "\E[17;14H"
+echo -e "x"
+echo -ne "\E[18;5H"
+echo -e "x"
+echo -e "\E[11;9Haaa" # Рисуем цифру 1
+echo -e "\E[12;8Haa" 
+echo -e "\E[12;10Haa"
+echo -e "\E[13;10Haa"
+echo -e "\E[14;10Haa"
+echo -e "\E[15;10Haa"
+echo -e "\E[16;10Haa"
+echo -e "\E[17;10Haa"
+echo -ne "\E[18;5H"
+echo -e "mqqqqqqqqj" # Нижняя граница рамки
+echo -ne "\E(B"       # Выходим из режима альтернативного вывода символов
