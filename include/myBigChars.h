@@ -1,6 +1,4 @@
-#ifndef __GUARD_MYBIGCHARS
-#define __GUARD_MYBIGCHARS
-
+#pragma once
 #include "myTerm.h"
 #include <errno.h>
 #include <stdio.h>
@@ -25,5 +23,3 @@ int bc_getbigcharpos (int *big, int x, int y, int *value);
 int bc_printbigchar (int *big, int x, int y, enum colors fg, enum colors bg);
 int bc_bigcharwrite (int fd, int *big, int count);
 int bc_bigcharread (int fd, int *big, int need_count, int *count);
-
-#endif /* __GUARD_MYBIGCHARS */

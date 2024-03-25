@@ -29,9 +29,13 @@
 #define INOUT_BLOCK_Y 20
 #define INOUT_BLOCK_HEIGHT 4
 
+#define FONT_SIZE 18
+#define CHAR_SIZE 2
+
 extern int ACTIVE_MEMORY;
 extern int INOUT_ARRAY[];
 extern int INOUT_INPUT[];
+extern int font[FONT_SIZE][CHAR_SIZE];
 
 void printCell (int address, enum colors fg, enum colors bg);
 void printFlags ();
@@ -43,3 +47,4 @@ void printMemory ();
 void printTerm (int address, int input);
 void moveInout ();
 int generateFont ();
+void printBigCell (int cell, int x, int y);
