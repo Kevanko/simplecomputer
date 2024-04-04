@@ -9,3 +9,6 @@ clean:
 	$(MAKE) clean -C myTerm
 	$(MAKE) clean -C mySimpleComputer
 	$(MAKE) clean -C console
+
+run:
+	./console/bin/console
