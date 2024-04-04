@@ -1,83 +1,83 @@
-#include "../include/mySimpleComputer.h"
 #include "console.h"
-#include <stdio.h>
 
 int
-main ()
+main (int argv, char *argc[])
 {
-  // Инициализация оперативной памяти, аккумулятора, счетчика команд и
-  // регистра флагов
+  generateFont ();
+  if (!isatty (STDOUT_FILENO))
+    {
+      printf ("Error: Output is not a terminal\n");
+      return 1;
+    }
+
+  int rows, cols;
+  mt_getscreensize (&rows, &cols);
+  if (rows < INOUT_BLOCK_HEIGHT + INOUT_BLOCK_Y + 1 || cols < FLAGS_X + 9)
+    {
+      printf ("Error: Terminal window is too small\n");
+      return 1;
+    }
+
+  // Открываем файл для чтения
+  FILE *file = fopen (argv > 1 ? argc[1] : "font.bin", "rb");
+  if (file == NULL)
+    {
+      printf ("Ошибка шрифт не найден\n");
+      return 1;
+    }
+  int read_result;
+  bc_bigcharread (fileno (file), (int *)font, FONT_SIZE, &read_result);
+  fclose (file);
+  if (read_result == FONT_SIZE - 1)
+    {
+      printf ("Ошибка при чтении шрифта из файла\n");
+      return 1;
+    }
+
+  mt_clrscr ();
+
+  // Инициализация памяти, регистров и аккумулятора
   sc_memoryInit ();
+  sc_regInit ();
   sc_accumulatorInit ();
   sc_icounterInit ();
-  sc_regInit ();
 
-  // Установка произвольных значений в оперативную память и вывод ее
-  // содержимого (в данном примере установим все ячейки памяти в значение 5)
-  for (int i = 7; i < 26; i++)
-    {
-      sc_memorySet (i, 5);
-    }
-
-  // Вывод содержимого оперативной памяти
   for (int i = 0; i < MEMORY_SIZE; i++)
     {
-      if ((i) % 10 == 0)
-        {
-          printf ("\n");
-        }
-      printCell (i);
+      sc_memorySet (i, rand () % 1000);
     }
-  printf ("\n");
 
-  // Попытка задать недопустимое значение ячейке памяти
-  int invalidMemoryValue = 40000;
-  int result = sc_memorySet (10, invalidMemoryValue);
-  printf ("Status of setting invalid memory value: %d\n", result);
-
-  // Установка произвольных значений флагов и вывод их содержимого
-  sc_regSet (FLAG_OVERFLOW_MASK, 1);
+  sc_regSet (FLAG_OVERFLOW_MASK, 0);
   sc_regSet (FLAG_DIVISION_BY_ZERO_MASK, 0);
   sc_regSet (FLAG_OUT_OF_MEMORY_MASK, 1);
-  sc_regSet (FLAG_INVALID_COMMAND_MASK, 0);
+  sc_regSet (FLAG_INVALID_COMMAND_MASK, 1);
   sc_regSet (FLAG_IGNORE_CLOCK_MASK, 1);
-  printFlags ();
 
-  // Попытка установить некорректное значение флага
-  result = sc_regSet (FLAG_OVERFLOW_MASK, 2);
-  printf ("Status of setting invalid flag value: %d\n", result);
-
-  // Установка значения аккумулятора и вывод его на экран
-  sc_accumulatorSet (100);
+  // Вывод текстовых данных консоли
+  bc_box (1, 1, 63, 15, WHITE, BLACK, "Оперативная память", RED, BLACK);
+  printMemory ();
+  bc_box (1, 16, 63, 18, WHITE, BLACK, "Редактируемая ячейка (Формат)", RED,
+          BLACK);
+  printDecodedCommand (memory[ACTIVE_MEMORY]);
+  bc_box (64, 1, 86, 3, WHITE, BLACK, "Аккумулятор", RED, BLACK);
   printAccumulator ();
-
-  // Попытка задать недопустимое значение аккумулятору
-  int invalidAccValue = 40000;
-  result = sc_accumulatorSet (invalidAccValue);
-  printf ("Status of setting invalid accumulator value: %d\n", result);
-
-  // Установка значения счетчика команд и вывод его на экран
-  sc_icounterSet (50);
+  bc_box (64, 4, 86, 6, WHITE, BLACK, "Счетчик команд", RED, BLACK);
   printCounters ();
+  bc_box (87, 1, 114, 3, WHITE, BLACK, "Регистр флагов", RED, BLACK);
+  printFlags ();
+  bc_box (87, 4, 114, 6, WHITE, BLACK, "Команда", RED, BLACK);
+  printCommand ();
 
-  // Попытка задать недопустимое значение счетчику команд
-  int invalidCounterValue = -10;
-  result = sc_icounterSet (invalidCounterValue);
-  printf ("Status of setting invalid counter value: %d\n", result);
+  for (int i = 0; i < 8; i++)
+    {
+      printTerm (i, 1);
+    }
+  bc_box (67, 19, 80, 24, WHITE, BLACK, "IN--OUT", GREEN, BLACK);
 
-  // Декодирование произвольной ячейки памяти и значения
-  // аккумулятора
-  printCell (8);
-  printf ("\n");
-  printAccumulator ();
+  bc_box (64, 7, 114, 18, WHITE, BLACK, "Редактируемая ячейка (увеличино)",
+          RED, BLACK);
 
-  // Кодирование команды и вывод полученного значения в разных системах
-  // счисления
-  int command = 0x33;
-  int encodedValue;
-  sc_commandEncode (0, command, 0x59, &encodedValue);
-  printDecodedCommand (encodedValue);
-  printf ("\n");
-
+  printBigCell (memory[ACTIVE_MEMORY], 67, 9);
+  mt_gotoXY (0, 25);
   return 0;
 }

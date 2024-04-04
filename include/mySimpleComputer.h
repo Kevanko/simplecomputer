@@ -15,8 +15,8 @@
 #define FLAG_OVERFLOW_MASK 0x1         // O
 #define FLAG_DIVISION_BY_ZERO_MASK 0x2 // Z
 #define FLAG_OUT_OF_MEMORY_MASK 0x4    // M
-#define FLAG_INVALID_COMMAND_MASK 0x8  // C
-#define FLAG_IGNORE_CLOCK_MASK 0x10    // I
+#define FLAG_INVALID_COMMAND_MASK 0x8  // E
+#define FLAG_IGNORE_CLOCK_MASK 0x10    // T
 
 extern int *memory;
 extern int accumulator;
@@ -40,8 +40,3 @@ int sc_icounterGet (int *value);
 int sc_commandEncode (int sign, int command, int operand, int *value);
 int sc_commandDecode (int value, int *sign, int *command, int *operand);
 int sc_commandValidate (int command);
-void printCell (int address);
-void printFlags (void);
-void printDecodedCommand (int value);
-void printAccumulator (void);
-void printCounters (void);
