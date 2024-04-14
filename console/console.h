@@ -1,5 +1,6 @@
 #pragma once
 #include <myBigChars.h>
+#include <myReadKey.h>
 #include <mySimpleComputer.h>
 #include <myTerm.h>
 #include <stdio.h>
@@ -48,3 +49,13 @@ void printTerm (int address, int input);
 void moveInout ();
 int generateFont ();
 void printBigCell (int cell, int x, int y);
+void editCell (int *cell);
+void handleKeypress (enum keys *key);
+int checkConsole (int argv, char *argc[]);
+void drawConsole ();
+int loadMemory ();
+int saveMemory ();
+int setCellValue ();
+int setCounterValue ();
+int setAccumulatorValue ();
+int setDefaultValue();
