@@ -38,7 +38,7 @@ handleKeypress (enum keys *key)
     case KEY_T:
       break;
     case KEY_I:
-      setDefaultValue();
+      setDefaultValue ();
       break;
 
     case KEY_F5:
