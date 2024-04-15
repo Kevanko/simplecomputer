@@ -12,7 +12,7 @@ checkConsole (int argv, char *argc[])
 
   int rows, cols;
   mt_getscreensize (&rows, &cols);
-  if (rows < INOUT_BLOCK_HEIGHT + INOUT_BLOCK_Y + 1 || cols < FLAGS_X + 9)
+  if (rows < INOUT_BLOCK_HEIGHT + INOUT_BLOCK_Y + 1 || cols < FLAGS_X + 22)
     {
       printf ("Error: Terminal window is too small\n");
       return 1;
