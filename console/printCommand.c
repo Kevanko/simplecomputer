@@ -16,6 +16,6 @@ printCommand (void)
   else
     {
       sc_commandDecode (cmd, &sign, &commandCode, &operand);
-      printf ("+%02d : %02X", sign, commandCode);
+      printf ("+%02X : %02X", commandCode, operand);
     }
 }
