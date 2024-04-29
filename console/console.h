@@ -1,9 +1,10 @@
 #pragma once
-#include <myBigChars.h>
-#include <myReadKey.h>
-#include <mySimpleComputer.h>
-#include <myTerm.h>
-#include <stdio.h>
+#include "myBigChars.h"
+#include "myReadKey.h"
+#include "mySimpleComputer.h"
+#include "myTerm.h"
+#include "signal.h"
+#include "stdio.h"
 
 #define MEMORY_X 2
 #define MEMORY_Y 2
@@ -28,15 +29,15 @@
 
 #define INOUT_BLOCK_X 69
 #define INOUT_BLOCK_Y 20
-#define INOUT_BLOCK_HEIGHT 4
+#define INOUT_BLOCK_HEIGHT 5
 
 #define FONT_SIZE 18
 #define CHAR_SIZE 2
 
-extern int ACTIVE_MEMORY;
 extern int INOUT_ARRAY[];
 extern int INOUT_INPUT[];
 extern int font[FONT_SIZE][CHAR_SIZE];
+extern int interact_mode;
 
 void printCell (int address, enum colors fg, enum colors bg);
 void printFlags ();
@@ -59,3 +60,4 @@ int setCellValue ();
 int setCounterValue ();
 int setAccumulatorValue ();
 int setDefaultValue ();
+void printKeys ();

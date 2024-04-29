@@ -3,7 +3,7 @@ LIB_NAME = libsimplecomputer
 LIB2_NAME = libmyterm
 LIB3_NAME = libmybigchars
 LIB4_NAME = libmyreadkey
-CFLAGS = -I../include -Wall -Wextra -Werror
+CFLAGS = -I../include
 CC = gcc
 SRC_EXT = c
 

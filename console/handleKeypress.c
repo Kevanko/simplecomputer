@@ -5,25 +5,45 @@ handleKeypress (enum keys *key)
 {
   switch (*key)
     {
+    case KEY_R:
+      sc_regSet (FLAG_IGNORE_CLOCK_MASK, 0);
+      interact_mode = 1;
+      break;
+    case KEY_T:
+      if (instruction_counter >= 127)
+        instruction_counter = 0;
+      else if (interact_mode)
+        CU ();
+      break;
+    case KEY_I:
+      raise (SIGUSR1);
+      break;
+    }
+
+  if (interact_mode)
+    return;
+
+  switch (*key)
+    {
     case KEY_UP:
-      (ACTIVE_MEMORY <= 9)
-          ? (ACTIVE_MEMORY += (ACTIVE_MEMORY >= 8 ? 110 : 120))
-          : (ACTIVE_MEMORY -= 10);
+      (instruction_counter <= 9)
+          ? (instruction_counter += (instruction_counter >= 8 ? 110 : 120))
+          : (instruction_counter -= 10);
       break;
     case KEY_RIGHT:
-      (!((ACTIVE_MEMORY + 1) % (ACTIVE_MEMORY >= 120 ? 8 : 10)))
-          ? (ACTIVE_MEMORY -= (ACTIVE_MEMORY >= 120 ? 7 : 9))
-          : (ACTIVE_MEMORY += 1);
+      (!((instruction_counter + 1) % (instruction_counter >= 120 ? 8 : 10)))
+          ? (instruction_counter -= (instruction_counter >= 120 ? 7 : 9))
+          : (instruction_counter += 1);
       break;
     case KEY_DOWN:
-      (ACTIVE_MEMORY >= 118)
-          ? (ACTIVE_MEMORY -= (ACTIVE_MEMORY < 120 ? 110 : 120))
-          : (ACTIVE_MEMORY += 10);
+      (instruction_counter >= 118)
+          ? (instruction_counter -= (instruction_counter < 120 ? 110 : 120))
+          : (instruction_counter += 10);
       break;
     case KEY_LEFT:
-      (!(ACTIVE_MEMORY % 10))
-          ? (ACTIVE_MEMORY += (ACTIVE_MEMORY >= 120 ? 7 : 9))
-          : (ACTIVE_MEMORY -= 1);
+      (!(instruction_counter % 10))
+          ? (instruction_counter += (instruction_counter >= 120 ? 7 : 9))
+          : (instruction_counter -= 1);
       break;
 
     case KEY_L:
@@ -31,14 +51,6 @@ handleKeypress (enum keys *key)
       break;
     case KEY_S:
       saveMemory ();
-      break;
-
-    case KEY_R:
-      break;
-    case KEY_T:
-      break;
-    case KEY_I:
-      setDefaultValue ();
       break;
 
     case KEY_F5:
@@ -54,6 +66,7 @@ handleKeypress (enum keys *key)
 
     case KEY_OTHER:
       break;
+
     case KEY_ESC:
       break;
     }

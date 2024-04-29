@@ -6,7 +6,7 @@ printMemory ()
   enum colors fg = GREEN, bg = BLACK;
   for (int i = 0; i < MEMORY_SIZE; i++)
     {
-      if (i == ACTIVE_MEMORY)
+      if (i == instruction_counter)
         {
           fg = BLACK;
           bg = WHITE;

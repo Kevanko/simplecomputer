@@ -12,6 +12,6 @@ printBigCell (int cell, int x, int y)
     }
   mt_gotoXY (x, y + 8);
   mt_setfgcolor (BLUE);
-  printf ("Номер редактируемой ячейки: %03d", ACTIVE_MEMORY);
+  printf ("Номер редактируемой ячейки: %03d", instruction_counter);
   mt_setdefaultcolor ();
 }

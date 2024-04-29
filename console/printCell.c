@@ -14,7 +14,13 @@ printCell (int address, enum colors fg, enum colors bg)
   if (bg != 0)
     mt_setbgcolor (bg);
   mt_gotoXY (x, y);
-  printf ("+%04X", memory[address]);
+  int sign = 0, command = 0, operand = 0;
+  sc_commandDecode (memory[address], &sign, &command, &operand);
+  if (sign)
+    printf ("-");
+  else
+    printf ("+");
+  printf ("%04X", memory[address] & ~COMMAND_SIGN_BIT);
   mt_setdefaultcolor ();
   printf (" ");
 }

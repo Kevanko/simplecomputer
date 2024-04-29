@@ -40,3 +40,31 @@ int sc_icounterGet (int *value);
 int sc_commandEncode (int sign, int command, int operand, int *value);
 int sc_commandDecode (int value, int *sign, int *command, int *operand);
 int sc_commandValidate (int command);
+void CU ();
+int ALU (int command, int operand);
+void IRC (int signum);
+
+#pragma once
+//Операции ввода/вывода
+#define READ 0x10
+#define WRITE 0x11
+
+//Операции загрузки/выгрузки в аккумулятор
+#define LOAD 0x20
+#define STORE 0x21
+
+//Арифметические операции
+#define ADD 0x30
+#define SUB 0x31
+#define DIVIDE 0x32
+#define MUL 0x33
+
+//Операции передачи управления
+#define JUMP 0x40
+#define JNEG 0x41
+#define JZ 0x42
+#define HALT 0x43
+
+// Пользовательские функции
+#define JNS 0x55
+#define CHL 0x60

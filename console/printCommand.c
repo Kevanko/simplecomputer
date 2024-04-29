@@ -3,19 +3,16 @@
 void
 printCommand (void)
 {
-  int cmd = memory[instruction_counter];
-  int sign, commandCode, operand;
-
+  int sign, command, operand;
+  sc_commandDecode (memory[instruction_counter], &sign, &command, &operand);
   mt_gotoXY (COMMAND_X, COMMAND_Y);
 
-  if (sc_commandValidate (cmd))
+  if (sc_commandValidate (command) || sign)
     {
-      printf ("! %02X : %02X", cmd & COMMAND_SIGN_BIT,
-              (cmd >> COMMAND_COMMAND_SHIFT) & 0x7F);
+      printf ("! %02X : %02X  ", command, command);
     }
   else
     {
-      sc_commandDecode (cmd, &sign, &commandCode, &operand);
-      printf ("+%02X : %02X", commandCode, operand);
+      printf ("+%02X : %02d  ", command, operand);
     }
 }
