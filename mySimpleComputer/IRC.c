@@ -11,11 +11,29 @@ IRC (int signum)
   if (signum == SIGALRM)
     {
       int flagt;
+      static int waitTacts = 0;
       sc_regGet (FLAG_IGNORE_CLOCK_MASK, &flagt);
       fflush (stdout);
       if (!flagt)
         {
-          CU ();
+          if(!waitTacts)
+            TACTS = 0;
+          else if(TACTS < 10)
+            TACTS += 1;
+          else{
+            TACTS = 0;
+            waitTacts = 0;
+          }
+          if(cacheCheck (memory[instruction_counter])){
+            waitTacts = 1;
+            TACTS = 1;
+          }
+
+          if(!waitTacts)
+            CU ();
+
+          drawConsole ();
+          alarm (1);
         }
     }
   else if (signum == SIGUSR1)
@@ -25,7 +43,7 @@ IRC (int signum)
       for (int i = 0; i < 128; i++)
         {
           if (sc_memorySet (i, 0) != 0)
-            return -1;
+            return;
         }
       sc_icounterSet (0);
     }

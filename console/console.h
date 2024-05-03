@@ -61,3 +61,4 @@ int setCounterValue ();
 int setAccumulatorValue ();
 int setDefaultValue ();
 void printKeys ();
+void printCache();

@@ -11,6 +11,8 @@
 #define COMMAND_OPERAND_BITS 0x007F //    0000000 01111111
 
 #define MEMORY_SIZE 128
+#define CACHE_LINES 5 // Количество строк в кэше
+#define CACHE_LINE_SIZE 10 // Размер строки кэша (10 ячеек)
 
 #define FLAG_OVERFLOW_MASK 0x1         // O
 #define FLAG_DIVISION_BY_ZERO_MASK 0x2 // Z
@@ -22,6 +24,15 @@ extern int *memory;
 extern int accumulator;
 extern int instruction_counter;
 extern int flags_register;
+extern int TACTS;
+
+typedef struct CACHE{
+    int c_line[CACHE_LINE_SIZE];
+    int c_number;
+    int c_uses;
+}CACHE;
+
+extern CACHE cache[CACHE_LINES];
 
 int sc_memoryInit (void);
 int sc_memorySet (int address, int value);
@@ -43,6 +54,8 @@ int sc_commandValidate (int command);
 void CU ();
 int ALU (int command, int operand);
 void IRC (int signum);
+int cacheCheck(int instruction);
+void cacheLoad(CACHE * changed);
 
 #pragma once
 //Операции ввода/вывода
