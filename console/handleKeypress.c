@@ -17,6 +17,7 @@ handleKeypress (enum keys *key)
       break;
     case KEY_I:
       raise (SIGUSR1);
+      interact_mode = 0;
       break;
     }
 

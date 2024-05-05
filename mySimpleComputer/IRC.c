@@ -39,12 +39,6 @@ IRC (int signum)
   else if (signum == SIGUSR1)
     {
       sc_accumulatorSet (0);
-      printAccumulator ();
-      for (int i = 0; i < 128; i++)
-        {
-          if (sc_memorySet (i, 0) != 0)
-            return;
-        }
       sc_icounterSet (0);
     }
 }
