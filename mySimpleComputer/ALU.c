@@ -28,7 +28,7 @@ ALU (int command, int operand)
       break;
 
     case MUL:
-      accumulator = (accumulator *memory[operand]) & 0x7FFF;
+      accumulator = (accumulator * memory[operand]) & 0x7FFF;
       break;
 
     case CHL: // Дополнительное

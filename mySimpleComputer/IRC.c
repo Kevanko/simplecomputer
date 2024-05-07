@@ -16,20 +16,22 @@ IRC (int signum)
       fflush (stdout);
       if (!flagt)
         {
-          if(!waitTacts)
+          if (!waitTacts)
             TACTS = 0;
-          else if(TACTS < 10)
+          else if (TACTS < 10)
             TACTS += 1;
-          else{
-            TACTS = 0;
-            waitTacts = 0;
-          }
-          if(cacheCheck (memory[instruction_counter])){
-            waitTacts = 1;
-            TACTS = 1;
-          }
+          else
+            {
+              TACTS = 0;
+              waitTacts = 0;
+            }
+          if (cacheCheck (memory[instruction_counter]))
+            {
+              waitTacts = 1;
+              TACTS = 1;
+            }
 
-          if(!waitTacts)
+          if (!waitTacts)
             CU ();
 
           drawConsole ();

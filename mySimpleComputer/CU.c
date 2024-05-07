@@ -33,25 +33,26 @@ CU ()
         {
         case READ:
           mt_gotoXY (75, 20);
-          printf("      ");
-          printTerm(operand, 0);
-          rk_mytermrestore();
+          printf ("      ");
+          printTerm (operand, 0);
+          rk_mytermrestore ();
           mt_gotoXY (75, 20);
-          if(rk_readvalue (&read, 0))
+          if (rk_readvalue (&read, 0))
             read = 0;
           rk_mytermregime (0, 30, 0, 0, 0);
 
-          inoutSet(operand, read);
+          inoutSet (operand, read);
 
-          if (sc_memorySet (operand, read) != 0){
+          if (sc_memorySet (operand, read) != 0)
+            {
               sc_regSet (FLAG_IGNORE_CLOCK_MASK, 0);
               break;
-          }
+            }
           sc_regSet (FLAG_IGNORE_CLOCK_MASK, 0);
           break;
 
         case WRITE:
-          printTerm(operand, -1);
+          printTerm (operand, -1);
           break;
 
         case LOAD:
@@ -90,5 +91,5 @@ CU ()
           break;
         }
     }
-  instruction_counter ++;
+  instruction_counter++;
 }

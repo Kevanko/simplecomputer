@@ -32,6 +32,6 @@ drawConsole ()
   printBigCell (memory[instruction_counter], 67, 9);
 
   bc_box (1, 19, 66, 25, WHITE, BLACK, "Кэш процессора", GREEN, BLACK);
-  printCache();
+  printCache ();
   mt_gotoXY (0, 26);
 }
