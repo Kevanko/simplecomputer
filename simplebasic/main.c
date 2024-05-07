@@ -78,7 +78,7 @@ read_instructions (const char *filename)
   size_t len = 0;
   ssize_t read;
   char command[10];
-    while ((read = getline(&line, &len, file)) != -1)
+  while ((read = getline (&line, &len, file)) != -1)
     {
       if (sscanf (line, "%d %s %d", &address, &command, &value) == 3)
         {
@@ -88,7 +88,7 @@ read_instructions (const char *filename)
         }
       else
         {
-          printf("ERROR\n");
+          printf ("ERROR\n");
         }
     }
 
@@ -98,16 +98,16 @@ read_instructions (const char *filename)
 int
 main (int argc, char *argv[])
 {
-  if (strcmp(argv[1],"sat") == 0 && argc == 4)
+  if (argv[1] == "sat" && argc == 3)
   {
-    read_instructions (argv[2]);
+    read_instructions ("instructions.sa");
     for (int i = 0; i < MEM_SIZE; i++)
       {
         printf ("%04x ", memory[i]);
         if ((i + 1) % 10 == 0)
           printf ("\n");
       }
-    FILE *f = fopen (argv[3], "wb");
+    FILE *f = fopen ("result.o", "wb");
     fwrite (memory, sizeof (int), MEM_SIZE, f);
     printf ("\n");
     return 0;
