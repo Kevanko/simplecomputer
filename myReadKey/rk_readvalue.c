@@ -8,23 +8,13 @@ rk_readvalue (int *value, int timeout)
   fflush (stdin);
   int number;
   char *tmp;
-  if (buffer[0] == '+')
+
+  number = strtol (buffer, &tmp, 16);
+  if (number > 0x7FFF)
     {
-      number = strtol (&buffer[1], &tmp, 16);
-      if (number > 0x3FFF)
-        {
-          return -1;
-        }
-      *value = number;
+      return -1;
     }
-  else
-    {
-      number = strtol (buffer, &tmp, 16);
-      if (number > 0x3FFF)
-        {
-          return -1;
-        }
-      *value = number;
-    }
+  *value = number;
+
   return 0;
 }

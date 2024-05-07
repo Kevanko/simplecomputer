@@ -10,11 +10,11 @@ ALU (int command, int operand)
   switch (command)
     {
     case ADD:
-      accumulator += memory[operand];
+      accumulator = (accumulator + memory[operand]) & 0x7FFF;
       break;
 
     case SUB:
-      accumulator -= memory[operand];
+      accumulator = (accumulator + ~memory[operand] + 1) & 0x7FFF;
       break;
 
     case DIVIDE:
@@ -28,14 +28,14 @@ ALU (int command, int operand)
       break;
 
     case MUL:
-      accumulator *= memory[operand];
+      accumulator = (accumulator *memory[operand]) & 0x7FFF;
       break;
 
     case CHL: // Дополнительное
-      accumulator = memory[operand] << 1;
+      accumulator = (memory[operand] << 1) & 0x7FFF;
       break;
     }
-  if ((accumulator > 0x3FFF) || (accumulator < 0))
+  if ((accumulator > 0x7FFF) || (accumulator < 0))
     {
       sc_regSet (FLAG_OUT_OF_MEMORY_MASK, 1);
       return -1;

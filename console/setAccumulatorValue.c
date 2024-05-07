@@ -3,7 +3,7 @@
 int
 setAccumulatorValue ()
 {
-  mt_gotoXY (ACCUMULATOR_X + 4, ACCUMULATOR_Y);
+  mt_gotoXY (ACCUMULATOR_X + 5, ACCUMULATOR_Y);
   int number;
   rk_readvalue (&number, 0);
   sc_accumulatorSet (number);

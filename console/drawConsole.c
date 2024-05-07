@@ -3,6 +3,7 @@
 void
 drawConsole ()
 {
+  /*TODO: CHANGE TEXT TO UTF-8 ENCODE AND DECODE*/
   bc_box (1, 1, 63, 15, WHITE, BLACK, "Оперативная память", RED, BLACK);
   printMemory ();
   bc_box (1, 16, 63, 18, WHITE, BLACK, "Редактируемая ячейка (Формат)", RED,
@@ -18,9 +19,9 @@ drawConsole ()
   printCommand ();
 
   bc_box (67, 19, 80, 25, WHITE, BLACK, "IN--OUT", GREEN, BLACK);
-  for (int i = 0; i < 8; i++)
+  for (int i = 0; i < INOUT_BLOCK_HEIGHT; i++)
     {
-      printTerm (i, 1);
+      printTerm (-1, 0);
     }
   bc_box (81, 19, 114, 25, WHITE, BLACK, "Клавиши", GREEN, BLACK);
   printKeys ();

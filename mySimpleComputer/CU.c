@@ -32,43 +32,26 @@ CU ()
       switch (command)
         {
         case READ:
-          mt_gotoXY (21, 123);
-          printf ("             ");
-          fflush (stdout);
-          mt_gotoXY (22, 123);
-          printf ("             ");
-          fflush (stdout);
-          mt_gotoXY (23, 123);
-          printf ("             ");
-          fflush (stdout);
-          mt_gotoXY (21, 123);
-          printf ("Запись memory:");
-          fflush (stdout);
-          mt_gotoXY (22, 123);
-          rk_readvalue (&read, 4);
-          if (sc_memorySet (operand, read + 1280) != 0)
-            {
-              sc_regSet (FLAG_OUT_OF_MEMORY_MASK, 1);
+          mt_gotoXY (75, 20);
+          printf("      ");
+          printTerm(operand, 0);
+          rk_mytermrestore();
+          mt_gotoXY (75, 20);
+          if(rk_readvalue (&read, 0))
+            read = 0;
+          rk_mytermregime (0, 30, 0, 0, 0);
+
+          inoutSet(operand, read);
+
+          if (sc_memorySet (operand, read) != 0){
+              sc_regSet (FLAG_IGNORE_CLOCK_MASK, 0);
               break;
-            }
+          }
+          sc_regSet (FLAG_IGNORE_CLOCK_MASK, 0);
           break;
 
         case WRITE:
-          mt_gotoXY (21, 123);
-          printf ("             ");
-          fflush (stdout);
-          mt_gotoXY (22, 123);
-          printf ("             ");
-          fflush (stdout);
-          mt_gotoXY (23, 123);
-          printf ("             ");
-          fflush (stdout);
-          mt_gotoXY (21, 123);
-          printf ("Вывод memory:");
-          fflush (stdout);
-          mt_gotoXY (22, 123);
-          printf ("+%04x", memory[operand]);
-          fflush (stdout);
+          printTerm(operand, -1);
           break;
 
         case LOAD:
@@ -84,18 +67,18 @@ CU ()
           break;
 
         case JNEG:
-          if (accumulator < 0)
-            sc_icounterSet (operand);
+          if ((accumulator >> 14) & 1 && accumulator != 0)
+            sc_icounterSet (operand - 1);
           break;
 
         case JZ:
           if (accumulator == 0)
-            sc_icounterSet (operand);
+            sc_icounterSet (operand - 1);
           break;
 
         case JNS: // Дополнительное
-          if (accumulator > 0)
-            sc_icounterSet (operand);
+          if ((!(accumulator >> 14) & 1) && accumulator != 0)
+            sc_icounterSet (operand - 1);
           break;
 
         case HALT:
@@ -107,5 +90,5 @@ CU ()
           break;
         }
     }
-  instruction_counter++;
+  instruction_counter ++;
 }
