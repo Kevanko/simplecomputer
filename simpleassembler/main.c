@@ -74,19 +74,21 @@ read_instructions (const char *filename)
     }
 
   int address, value, i;
+  char *line = NULL;
+  size_t len = 0;
+  ssize_t read;
   char command[10];
-  while (i <= 10)
+    while ((read = getline(&line, &len, file)) != -1)
     {
-      i++;
-      if (fscanf (file, "%d %s %d ;", &address, &command, &value) == 3)
+      if (sscanf (line, "%d %s %d", &address, &command, &value) == 3)
         {
           int cmd = get_command (command);
           memory[address] = value | cmd << 7;
+          printf ("COOL: %d %s %d\n", address, command, value);
         }
       else
         {
-          printf ("%d\n",
-                  fscanf (file, "%d %s %d", &address, &command, &value));
+          printf("ERROR\n");
         }
     }
 

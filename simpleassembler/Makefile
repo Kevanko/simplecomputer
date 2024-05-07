@@ -1,4 +1,4 @@
-APP_NAME = console
+APP_NAME = assembler
 CFLAGS = 
 CC = gcc
 SRC_EXT = c
@@ -32,3 +32,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.$(SRC_EXT)
 
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
+
+run:
+	./bin/assembler
