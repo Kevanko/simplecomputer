@@ -76,9 +76,8 @@ read_instructions (const char *filename)
   int address, value, i;
   char *line = NULL;
   size_t len = 0;
-  ssize_t read;
   char command[10];
-    while ((read = getline(&line, &len, file)) != -1)
+    while ((getline(&line, &len, file)) != -1)
     {
       if (sscanf (line, "%d %s %d", &address, &command, &value) == 3)
         {
@@ -98,7 +97,7 @@ read_instructions (const char *filename)
 int
 main (int argc, char *argv[])
 {
-  if (strcmp(argv[1],"sat") == 0 && argc == 4)
+  if (argc == 4 && strcmp(argv[1],"sat") == 0)
   {
     read_instructions (argv[2]);
     for (int i = 0; i < MEM_SIZE; i++)
@@ -112,5 +111,5 @@ main (int argc, char *argv[])
     printf ("\n");
     return 0;
   }
-  return -1;
+  return 1;
 }
