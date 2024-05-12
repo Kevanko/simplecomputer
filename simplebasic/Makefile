@@ -1,4 +1,4 @@
-APP_NAME = assembler
+APP_NAME = prog
 CFLAGS = 
 CC = gcc
 SRC_EXT = c
@@ -34,4 +34,4 @@ clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
 run:
-	./bin/assembler
+	 ./bin/prog basic.sb
