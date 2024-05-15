@@ -34,4 +34,4 @@ clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
 run:
-	 ./bin/prog basic.sb
+	 ./bin/prog basic.sb ../simpleassembler/assembler.sa

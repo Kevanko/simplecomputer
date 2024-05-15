@@ -1,3 +1,4 @@
+#include "rpm.h"
 #include <stdio.h>
 #include <stdlib.h> // Добавлен заголовок для функции exit()
 #include <string.h>
@@ -5,24 +6,24 @@
 #define MEM_SIZE 128
 
 // Операции ввода/вывода
-#define READ_ 0x10
-#define WRITE_ 0x11
+#define READ 0x10
+#define WRITE 0x11
 // Операции загрузки/выгрузки в аккумулятор
-#define LOAD_ 0x20
-#define STORE_ 0x21
+#define LOAD 0x20
+#define STORE 0x21
 // Арифметические операции
-#define ADD_ 0x30
-#define SUB_ 0x31
-#define DIVIDE_ 0x32
-#define MUL_ 0x33
+#define ADD 0x30
+#define SUB 0x31
+#define DIVIDE 0x32
+#define MUL 0x33
 // Операции передачи управления
-#define JUMP_ 0x40
-#define JNEG_ 0x41
-#define JZ_ 0x42
-#define HALT_ 0x43
+#define JUMP 0x40
+#define JNEG 0x41
+#define JZ 0x42
+#define HALT 0x43
 // Пользовательские функции
-#define JNS_ 0x55
-#define CHL_ 0x60
+#define JNS 0x55
+#define CHL 0x60
 
 typedef struct VARIABLES
 {
@@ -41,7 +42,7 @@ typedef struct MEMORY
 
 MEMORY memory[MEM_SIZE];
 VARIABLES vars[MEM_SIZE];
-VARIABLES empty_var = {0};
+VARIABLES empty_var = { 0 };
 
 int memory_next = 0; // Инициализация переменной memory_next
 int vars_next = 0; // Инициализация переменной vars_next
@@ -102,25 +103,7 @@ get_var_by_name (char *ch)
   return -1;
 }
 
-void
-goto_command (int goto_id)
-{
-  memory[memory_next].operation = (JUMP_ << 7) + goto_id;
-}
-
-void
-print_command ()
-{
-  memory[memory_next].operation = WRITE_;
-}
-
-void
-input_command ()
-{ // Переименована функция imput_command() на input_command()
-  memory[memory_next].operation = READ_;
-}
-
-void
+VARIABLES *
 set_var_memory (char *var_name)
 {
   int var_id = get_var_by_name (var_name);
@@ -129,90 +112,132 @@ set_var_memory (char *var_name)
       strcpy (vars[vars_next].name, var_name);
       vars[vars_next].address = -1;
       vars[vars_next].value = 0;
-      memory[memory_next].var = &vars[vars_next];
-      vars_next++;
+      return &vars[vars_next++];
     }
   else
     {
-      memory[memory_next].var = &vars[var_id];
+      return &vars[var_id];
     }
 }
 
- 
-void memory_set(int id, int command, VARIABLES *var){
-      memory[memory_next].id = id;
-    memory[memory_next].operation = command;
-        memory[memory_next].var = var;
+void
+memory_set (int id, int command, VARIABLES *var)
+{
+  memory[memory_next].id = id;
+  memory[memory_next].operation = command;
+  memory[memory_next].var = var;
+  memory_next++;
 }
+
+void
+let_func (char *buff, int id, int *deeps, VARIABLES *var, int is_load,
+ int operation)
+{
+  char name[2];
+  name[1] = '\0';
+  if (isalpha (buff[*deeps - 1]))
+    {
+      memory_next++;
+      name[0] = buff[--*deeps];
+      var = set_var_memory (name);
+      memory_set (id, operation, var);
+      memory_next -= 2;
+      name[0] = buff[--*deeps];
+      var = set_var_memory (name);
+      if (!is_load)
+        {
+          memory_set (id, LOAD, var);
+          is_load = 1;
+        }
+      else
+      memory_set (id, operation, var);
+      memory_next++;
+      *deeps--;
+    }
+  else
+    {
+
+      int counter = 1, num = 0;
+      while (isdigit (buff[*deeps - 1]))
+        {
+          num += (buff[--*deeps] - '0') * counter;
+          counter *= 10;
+        }
+      char tname[2];
+      sprintf (tname, "A%d", vars_next);
+      var = set_var_memory (tname);
+      var->value = num;
+      memory_next++;
+      memory_set (id, operation, var);
+      memory_next-=2;
+      name[0] = buff[--*deeps];
+      var = set_var_memory (name);
+      if (!is_load)
+        {
+          memory_set (id, LOAD, var);
+          is_load = 1;
+        }
+      else
+      memory_set (id, operation, var);
+      memory_next++;
+      *deeps--;
+    }
+}
+
 int
 get_command (int id, char *command, char *line)
 {
   char var_name[2]; // Изменен размер массива var_name
+  VARIABLES *var;
   if (strcmp (command, "REM") == 0)
     {
       return 0;
     }
   else if (strcmp (command, "INPUT") == 0)
     {
+      char s[100];
       sscanf (line, "%*s %s", var_name);
-      set_var_memory (var_name);
-      input_command ();
-      memory[memory_next].id = id;
+      var = set_var_memory (var_name);
+      memory_set (id, READ, var);
+      translate_to_rpn (s, strstr (line, var_name));
     }
   else if (strcmp (command, "IF") == 0)
     {
-      char operand[2]; // Увеличил размер массива operand
+      char operand[2];
       char newCommand[10];
       sscanf (line, "%*s %s %s %*d %s", var_name, operand, newCommand);
-      set_var_memory (var_name);
-      memory[memory_next].operation = LOAD_;
-      memory[memory_next].id = id;
-      memory_next++;
-      int temp_mem = memory_next;
+      var = set_var_memory (var_name);
+      memory_set (id, LOAD, var);
       if (strlen (operand) == 1)
-        { // Проверяем, является ли оператор одним символом
+        {
           switch (operand[0])
             {
             case '<':
-              memory[memory_next].operation = JNEG_;
+              memory[memory_next].operation = JNEG;
               break;
             case '>':
-              memory[memory_next].operation = JNS_;
+              memory[memory_next].operation = JNS;
               break;
             case '=':
-              memory[memory_next].operation = JUMP_;
+              memory[memory_next].operation = JUMP;
+
               break;
             default:
               return 0;
             }
         }
-      else if (strlen (operand) == 2)
-        { // Проверяем, является ли оператор двумя символами
-          if (strcmp (operand, "<=") == 0)
-            {
-              memory[memory_next].operation = JNEG_;
-            }
-          else if (strcmp (operand, ">=") == 0)
-            {
-              memory[memory_next].operation = JNS_;
-            }
-          else if (strcmp (operand, "==") == 0)
-            {
-              memory[memory_next].operation = JUMP_;
-            }
-          else
-            {
-              return 0; // Неизвестный оператор
-            }
-        }
       else
         {
-          return 0; // Оператор не является одним или двумя символами
+          return 0;
         }
       memory[memory_next].id = id;
       memory[memory_next].var = &empty_var;
+      memory[memory_next].command
+          = (memory[memory_next].operation << 7) + memory_next + 2;
       memory_next++;
-      get_command(id, newCommand, strstr(line, newCommand));
+      int temp_mem = memory_next;
+      memory_set (id, JUMP, &empty_var);
+      get_command (id, newCommand, strstr (line, newCommand));
 
       memory[temp_mem].command
           = (memory[temp_mem].operation << 7) + memory_next;
@@ -221,39 +246,90 @@ get_command (int id, char *command, char *line)
   else if (strcmp (command, "PRINT") == 0)
     {
       sscanf (line, "%*s %s", var_name);
-      set_var_memory (var_name);
-      print_command ();
-      memory[memory_next].id = id;
+      var = set_var_memory (var_name);
+      memory_set (id, WRITE, var);
     }
   else if (strcmp (command, "LET") == 0)
     {
-      char *p = strtok (line, " "); // Разделитель - пробел
-      p = strtok (NULL, " "); // Пропускаем LET
-      sscanf (p, "%s", var_name); // Считываем имя переменной
-      set_var_memory (var_name);
-      memory[memory_next].id = id;
-      memory[memory_next].operation = STORE_;
+      char s[100];
+      sscanf (line, "%*s %s", var_name);
+      translate_to_rpn (s, strstr (line, "=") + 1);
+      char buff[60];
+      int num = 0, n = 0;
+      int deeps = 0;
+      int is_load = 0;
+      while (s[n] != '\0')
+        {
+          if (isalpha (s[n]) || isdigit (s[n]))
+            buff[deeps++] = s[n];
+          if (s[n] == '+' || s[n] == '-' || s[n] == '/' || s[n] == '*')
+            {
+              switch (s[n])
+                {
+                case '+':
+                  let_func(buff, id, &deeps, var, is_load, ADD);
+                  break;
+                case '-':
+                  let_func(buff, id, &deeps, var, is_load, SUB);
+                  break;
+                case '/':
+                   let_func(buff, id, &deeps, var, is_load, DIVIDE);
+                  break;
+                case '*':
+                  let_func(buff, id, &deeps, var, is_load, MUL);
+                  break;
+                default:
+                  break;
+                }
+            }
+          n++;
+        }
+      is_load = 0;
+      char name[2];
+      name[1] = '\0';
+      if (deeps > 0)
+        {
+          if (isalpha (buff[deeps - 1]))
+            {
+              name[0] = buff[--deeps];
+              var = set_var_memory (name);
+              memory_set (id, LOAD, var);
+              deeps = 0;
+            }
+          else
+            {
+              int counter = 1;
+              while (deeps > 0)
+                {
+                  num += (buff[--deeps] - '0') * counter;
+                  counter *= 10;
+                }
+              char tname[5];
+              sprintf(tname,"A%d", vars_next);
+              var = set_var_memory (tname);
+              memory_set (id, LOAD, var);
+              var->value = num;
+            }
+        }
+
+      var = set_var_memory (var_name);
+      memory_set (id, STORE, var);
     }
+
   else if (strcmp (command, "GOTO") == 0)
     {
       int goto_id;
       sscanf (line, "%*s %d", &goto_id);
-      memory[memory_next].id = id;
-      memory[memory_next].var = &empty_var;
-      goto_command (goto_id);
+      memory_set (id, (JUMP << 7) + goto_id, &empty_var);
     }
   else if (strcmp (command, "END") == 0)
     {
-      memory[memory_next].id = id;
-      memory[memory_next].var = &empty_var;
-      memory[memory_next].command = HALT_ << 7;
-      memory[memory_next].operation = HALT_;
+      memory_set (id, HALT, &empty_var);
     }
   else
     {
       return 0;
     }
-  memory_next++;
   return 1;
 }
 
@@ -264,7 +340,7 @@ set_var_addr ()
     {
       vars[i].address = memory_next;
       memory[memory_next].command = vars[i].value;
-      memory[memory_next].var = &empty_var;
+      memory[memory_next].var = &vars[i];
       memory_next++;
     }
 }
@@ -273,35 +349,33 @@ void
 set_commands ()
 {
   for (int i = 0; i < memory_next; i++)
-    { // Изменен цикл на memory_next
+    {
       if (memory[i].command == 0 && memory[i].operation != 0
-          && (memory[i].operation >> 7) != JUMP_ && memory[i].var)
+          && (memory[i].operation >> 7) != JUMP && memory[i].var)
         {
           memory[i].command
               = (memory[i].operation << 7) + memory[i].var->address;
-
         }
     }
-
 }
 
 void
 set_gotos ()
 {
   for (int i = 0; i < memory_next; i++)
-    { // Изменен цикл на memory_next
-      if ((memory[i].operation >> 7) == JUMP_ && memory[i].command == 0)
+    {
+      if ((memory[i].operation >> 7) == JUMP && memory[i].command == 0)
         {
           int tmp = memory[i].operation & 0x7F;
-          int jump_id = get_id (tmp);
+          int JUMPid = get_id (tmp);
           memory[i].operation = (memory[i].operation >> 7) & 0x7F;
-          memory[i].command = (memory[i].operation << 7) + jump_id;
+          memory[i].command = (memory[i].operation << 7) + JUMPid;
         }
     }
 }
 
 void
-read_instructions (const char *filename)
+READinstructions (const char *filename)
 {
   FILE *file = fopen (filename, "r");
   if (file == NULL)
@@ -318,9 +392,9 @@ read_instructions (const char *filename)
     {
       if (sscanf (line, "%d %s", &id, command) == 2)
         {
-          if (get_command (id, command, strstr(line, command)))
+          if (get_command (id, command, strstr (line, command)))
             {
-              printf ("%d %s\n", id, command);
+              //printf ("%d %s\n", id, command);
             }
         }
       else
@@ -337,67 +411,80 @@ read_instructions (const char *filename)
 char *
 get_command_text (int command)
 {
-  if (command == READ_)
+  if (command == READ)
     return "READ";
-  else if (command == WRITE_)
+  else if (command == WRITE)
     return "WRITE";
-  else if (command == LOAD_)
+  else if (command == LOAD)
     return "LOAD";
-  else if (command == STORE_)
+  else if (command == STORE)
     return "STORE";
-  else if (command == ADD_)
+  else if (command == ADD)
     return "ADD";
-  else if (command == SUB_)
+  else if (command == SUB)
     return "SUB";
-  else if (command == DIVIDE_)
+  else if (command == DIVIDE)
     return "DIVIDE";
-  else if (command == MUL_)
+  else if (command == MUL)
     return "MUL";
-  else if (command == JUMP_ )
+  else if (command == JUMP)
     return "JUMP";
-  else if (command == JNEG_ )
+  else if (command == JNEG)
     return "JNEG";
-  else if (command == JZ_ )
+  else if (command == JZ)
     return "JZ";
-  else if (command == JNS_ )
+  else if (command == JNS)
     return "JNS";
-  else if (command == CHL_ )
+  else if (command == CHL)
     return "CHL";
-  else if (command == HALT_)
+  else if (command == HALT)
     return "HALT";
   else
     return 0;
 }
 
-void print_mem(){
- for (int i = 0; i < memory_next; i++){
-  if(memory[i].id != 0)
-    printf("[%d] %2.2d %s %2.2d\n", memory[i].id, i, get_command_text(memory[i].operation), memory[i].command & 0x7F);
-  else
-      printf("     %2.2d = %04x\n", i, memory[i].command);
- }
+void
+print_mem ()
+{
+  for (int i = 0; i < memory_next; i++)
+    {
+      if (memory[i].id != 0)
+        printf ("[%d] %2.2d %s %2.2d\n", memory[i].id, i,
+                get_command_text (memory[i].operation),
+                memory[i].command & 0x7F);
+      else
+        printf ("[%2.2s] %2.2d = %04d -> VAR\n", memory[i].var->name, i, memory[i].command);
+    }
+}
+
+void
+save_mem (char * filename)
+{
+  printf("%s\n", filename);
+  FILE * f = fopen(filename, "w");
+  for (int i = 0; i < memory_next; i++)
+    {
+      if (memory[i].id != 0)
+        fprintf (f, "%2.2d %s %2.2d\n", i,
+                get_command_text (memory[i].operation),
+                memory[i].command & 0x7F);
+      else
+        fprintf (f, "%2.2d = %04d\n", i, memory[i].command);
+    }
+    fclose(f);
 }
 
 int
 main (int argc, char *argv[])
 {
-  if (argc != 2)
+  if (argc != 3)
     {
-      printf ("Usage: %s filename\n", argv[0]);
+      printf ("Usage: %s filename.sb filename.sa \n", argv[0]);
       return EXIT_FAILURE;
     }
 
-  read_instructions (argv[1]);
-
-  for (int i = 0; i < MEM_SIZE; i++)
-    {
-      printf ("%04X ", memory[i].command);
-      if ((i + 1) % 10 == 0)
-        {
-          printf ("\n");
-        }
-    }
-  printf ("\n");
-  print_mem();
-  return EXIT_SUCCESS; 
+  READinstructions (argv[1]);
+  //print_mem ();
+  save_mem(argv[2]);
+  return EXIT_SUCCESS;
 }

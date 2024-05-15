@@ -83,7 +83,7 @@ read_instructions (const char *filename)
         {
           int cmd = get_command (command);
           memory[address] = value | cmd << 7;
-          printf ("COOL: %d %s %d\n", address, command, value);
+          //printf ("COOL: %d %s %d\n", address, command, value);
         }
       else
         {
@@ -100,15 +100,16 @@ main (int argc, char *argv[])
   if (argc == 4 && strcmp(argv[1],"sat") == 0)
   {
     read_instructions (argv[2]);
-    for (int i = 0; i < MEM_SIZE; i++)
-      {
-        printf ("%04x ", memory[i]);
-        if ((i + 1) % 10 == 0)
-          printf ("\n");
-      }
+    // for (int i = 0; i < MEM_SIZE; i++)
+    //   {
+    //     printf ("%04x ", memory[i]);
+    //     if ((i + 1) % 10 == 0)
+    //       printf ("\n");
+    //   }
     FILE *f = fopen (argv[3], "wb");
     fwrite (memory, sizeof (int), MEM_SIZE, f);
-    printf ("\n");
+    // printf ("\n");
+    fclose(f);
     return 0;
   }
   return 1;

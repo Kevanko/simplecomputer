@@ -34,4 +34,4 @@ clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
 run:
-	./bin/assembler
+	./bin/assembler sat assembler.sa ../result.o

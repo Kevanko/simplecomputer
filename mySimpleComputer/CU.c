@@ -64,7 +64,7 @@ CU ()
           break;
 
         case JUMP:
-          sc_icounterSet (operand);
+          sc_icounterSet (operand - 1);
           break;
 
         case JNEG:

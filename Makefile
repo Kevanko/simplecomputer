@@ -14,3 +14,6 @@ clean:
 
 run:
 	./console/bin/console
+build:
+	$(MAKE) run -C simplebasic
+	$(MAKE) run -C simpleassembler
