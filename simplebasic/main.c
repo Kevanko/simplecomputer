@@ -131,7 +131,7 @@ memory_set (int id, int command, VARIABLES *var)
 
 void
 let_func (char *buff, int id, int *deeps, VARIABLES *var, int is_load,
- int operation)
+          int operation)
 {
   char name[2];
   name[1] = '\0';
@@ -150,7 +150,7 @@ let_func (char *buff, int id, int *deeps, VARIABLES *var, int is_load,
           is_load = 1;
         }
       else
-      memory_set (id, operation, var);
+        memory_set (id, operation, var);
       memory_next++;
       *deeps--;
     }
@@ -169,7 +169,7 @@ let_func (char *buff, int id, int *deeps, VARIABLES *var, int is_load,
       var->value = num;
       memory_next++;
       memory_set (id, operation, var);
-      memory_next-=2;
+      memory_next -= 2;
       name[0] = buff[--*deeps];
       var = set_var_memory (name);
       if (!is_load)
@@ -178,7 +178,7 @@ let_func (char *buff, int id, int *deeps, VARIABLES *var, int is_load,
           is_load = 1;
         }
       else
-      memory_set (id, operation, var);
+        memory_set (id, operation, var);
       memory_next++;
       *deeps--;
     }
@@ -267,16 +267,16 @@ get_command (int id, char *command, char *line)
               switch (s[n])
                 {
                 case '+':
-                  let_func(buff, id, &deeps, var, is_load, ADD);
+                  let_func (buff, id, &deeps, var, is_load, ADD);
                   break;
                 case '-':
-                  let_func(buff, id, &deeps, var, is_load, SUB);
+                  let_func (buff, id, &deeps, var, is_load, SUB);
                   break;
                 case '/':
-                   let_func(buff, id, &deeps, var, is_load, DIVIDE);
+                  let_func (buff, id, &deeps, var, is_load, DIVIDE);
                   break;
                 case '*':
-                  let_func(buff, id, &deeps, var, is_load, MUL);
+                  let_func (buff, id, &deeps, var, is_load, MUL);
                   break;
                 default:
                   break;
@@ -305,7 +305,7 @@ get_command (int id, char *command, char *line)
                   counter *= 10;
                 }
               char tname[5];
-              sprintf(tname,"A%d", vars_next);
+              sprintf (tname, "A%d", vars_next);
               var = set_var_memory (tname);
               memory_set (id, LOAD, var);
               var->value = num;
@@ -394,7 +394,7 @@ READinstructions (const char *filename)
         {
           if (get_command (id, command, strstr (line, command)))
             {
-              //printf ("%d %s\n", id, command);
+              // printf ("%d %s\n", id, command);
             }
         }
       else
@@ -453,25 +453,26 @@ print_mem ()
                 get_command_text (memory[i].operation),
                 memory[i].command & 0x7F);
       else
-        printf ("[%2.2s] %2.2d = %04d -> VAR\n", memory[i].var->name, i, memory[i].command);
+        printf ("[%2.2s] %2.2d = %04d -> VAR\n", memory[i].var->name, i,
+                memory[i].command);
     }
 }
 
 void
-save_mem (char * filename)
+save_mem (char *filename)
 {
-  printf("%s\n", filename);
-  FILE * f = fopen(filename, "w");
+  printf ("%s\n", filename);
+  FILE *f = fopen (filename, "w");
   for (int i = 0; i < memory_next; i++)
     {
       if (memory[i].id != 0)
         fprintf (f, "%2.2d %s %2.2d\n", i,
-                get_command_text (memory[i].operation),
-                memory[i].command & 0x7F);
+                 get_command_text (memory[i].operation),
+                 memory[i].command & 0x7F);
       else
         fprintf (f, "%2.2d = %04d\n", i, memory[i].command);
     }
-    fclose(f);
+  fclose (f);
 }
 
 int
@@ -484,7 +485,7 @@ main (int argc, char *argv[])
     }
 
   READinstructions (argv[1]);
-  //print_mem ();
-  save_mem(argv[2]);
+  // print_mem ();
+  save_mem (argv[2]);
   return EXIT_SUCCESS;
 }

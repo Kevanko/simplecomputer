@@ -77,17 +77,17 @@ read_instructions (const char *filename)
   char *line = NULL;
   size_t len = 0;
   char command[10];
-    while ((getline(&line, &len, file)) != -1)
+  while ((getline (&line, &len, file)) != -1)
     {
       if (sscanf (line, "%d %s %d", &address, &command, &value) == 3)
         {
           int cmd = get_command (command);
           memory[address] = value | cmd << 7;
-          //printf ("COOL: %d %s %d\n", address, command, value);
+          // printf ("COOL: %d %s %d\n", address, command, value);
         }
       else
         {
-          printf("ERROR\n");
+          printf ("ERROR\n");
         }
     }
 
@@ -97,20 +97,20 @@ read_instructions (const char *filename)
 int
 main (int argc, char *argv[])
 {
-  if (argc == 4 && strcmp(argv[1],"sat") == 0)
-  {
-    read_instructions (argv[2]);
-    // for (int i = 0; i < MEM_SIZE; i++)
-    //   {
-    //     printf ("%04x ", memory[i]);
-    //     if ((i + 1) % 10 == 0)
-    //       printf ("\n");
-    //   }
-    FILE *f = fopen (argv[3], "wb");
-    fwrite (memory, sizeof (int), MEM_SIZE, f);
-    // printf ("\n");
-    fclose(f);
-    return 0;
-  }
+  if (argc == 4 && strcmp (argv[1], "sat") == 0)
+    {
+      read_instructions (argv[2]);
+      // for (int i = 0; i < MEM_SIZE; i++)
+      //   {
+      //     printf ("%04x ", memory[i]);
+      //     if ((i + 1) % 10 == 0)
+      //       printf ("\n");
+      //   }
+      FILE *f = fopen (argv[3], "wb");
+      fwrite (memory, sizeof (int), MEM_SIZE, f);
+      // printf ("\n");
+      fclose (f);
+      return 0;
+    }
   return 1;
 }
