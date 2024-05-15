@@ -2,8 +2,8 @@
 2  INPUT A
 3  LET R = 1
 4  LET B = 1
-5  LET T = B - A
-6  IF T > 0 GOTO 10
+5  LET A = A - 1
+6  IF A < 0 GOTO 10
 7  LET R = R * B
 8  LET B = B + 1
 9  GOTO 5
